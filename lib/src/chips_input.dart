@@ -454,7 +454,9 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
             ),
             Flexible(
               flex: 0,
-              child: TextCursor(resumed: _effectiveFocusNode.hasFocus),
+              child: TextCursor(
+                  cursorColor: widget.cursorColor,
+                  resumed: _effectiveFocusNode.hasFocus),
             ),
           ],
         ),

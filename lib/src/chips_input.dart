@@ -387,8 +387,6 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
           if (widget.onChipInputActionDone != null) {
             widget.onChipInputActionDone!(this, value);
           };
-        } else {
-          _focusNode.unfocus();
         }
         break;
       case TextInputAction.go:

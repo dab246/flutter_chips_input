@@ -12,6 +12,8 @@ typedef ChipsInputSuggestions<T> = FutureOr<List<T>> Function(String query);
 typedef ChipSelected<T> = void Function(T data, bool selected);
 typedef ChipsBuilder<T> = Widget Function(
     BuildContext context, ChipsInputState<T> state, T data);
+typedef OnChipInputActionDone<T> = void Function(ChipsInputState<T> state, String value);
+typedef OnChipInputChangeFocusAction<T> = void Function(ChipsInputState<T> state, String value);
 
 const kObjectReplacementChar = 0xFFFD;
 
@@ -53,6 +55,8 @@ class ChipsInput<T> extends StatefulWidget {
     this.allowChipEditing = false,
     this.focusNode,
     this.initialSuggestions,
+    this.onChipInputActionDone,
+    this.onChipInputChangeFocusAction,
   })  : assert(maxChips == null || initialValue.length <= maxChips),
         super(key: key);
 
@@ -79,6 +83,8 @@ class ChipsInput<T> extends StatefulWidget {
   final bool allowChipEditing;
   final FocusNode? focusNode;
   final List<T>? initialSuggestions;
+  final OnChipInputActionDone? onChipInputActionDone;
+  final OnChipInputChangeFocusAction? onChipInputChangeFocusAction;
 
   // final Color cursorColor;
 
@@ -167,6 +173,12 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
     } else {
       _closeInputConnectionIfNeeded();
       _suggestionsBoxController.close();
+      final value = _value.normalCharactersText;
+      if (value.isNotEmpty) {
+        if (widget.onChipInputChangeFocusAction != null) {
+          widget.onChipInputChangeFocusAction!(this, value);
+        };
+      }
     }
     if (mounted) {
       setState(() {
@@ -370,6 +382,15 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
   void performAction(TextInputAction action) {
     switch (action) {
       case TextInputAction.done:
+        final value = _value.normalCharactersText;
+        if (value.isNotEmpty) {
+          if (widget.onChipInputActionDone != null) {
+            widget.onChipInputActionDone!(this, value);
+          };
+        } else {
+          _focusNode.unfocus();
+        }
+        break;
       case TextInputAction.go:
       case TextInputAction.send:
       case TextInputAction.search:

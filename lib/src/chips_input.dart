@@ -165,6 +165,12 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
     } else {
       _closeInputConnectionIfNeeded();
       _suggestionsBoxController.close();
+      final value = _value.normalCharactersText;
+      if (value.isNotEmpty) {
+        if (widget.onChipInputChangeFocusAction != null) {
+          widget.onChipInputChangeFocusAction!(this, value);
+        };
+      }
     }
     if (mounted) {
       setState(() {
@@ -328,8 +334,7 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
       if (value.replacementCharactersCount <
           _oldTextEditingValue.replacementCharactersCount) {
         final removedChip = _chips.last;
-        setState(() =>
-        _chips = Set.of(_chips.take(value.replacementCharactersCount)));
+        setState(() => _chips = Set.of(_chips.take(value.replacementCharactersCount)));
         widget.onChanged(_chips.toList(growable: false));
         String? putText = '';
         if (widget.allowChipEditing && _enteredTexts.containsKey(removedChip)) {

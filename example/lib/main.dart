@@ -71,24 +71,15 @@ class _MyHomePageState extends State<MyHomePage> {
               TextField(),
               ChipsInput(
                 key: _chipKey,
-                /*initialValue: [
-                  AppProfile('John Doe', 'jdoe@flutter.io',
-                      'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX4057996.jpg'),
-                ],*/
-                // autofocus: true,
-                // allowChipEditing: true,
-                keyboardAppearance: Brightness.dark,
-                textCapitalization: TextCapitalization.words,
+                onChipInputActionDone:  (state, value) {
+                  state.selectSuggestion(AppProfile('$value', '$value',
+                      'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'));
+                },
                 enabled: true,
-                maxChips: 5,
                 textStyle: const TextStyle(
                     height: 1.5, fontFamily: 'Roboto', fontSize: 16),
                 decoration: const InputDecoration(
-                  // prefixIcon: Icon(Icons.search),
-                  // hintText: formControl.hint,
                   labelText: 'Select People',
-                  // enabled: false,
-                  // errorText: field.errorText,
                 ),
                 findSuggestions: (String query) {
                   // print("Query: '$query'");
@@ -138,75 +129,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               // TextField(),
-              /*ChipsInput(
-                initialValue: [
-                  AppProfile('John Doe', 'jdoe@flutter.io',
-                      'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX4057996.jpg'),
-                ],
-                enabled: true,
-                maxChips: 10,
-                textStyle: TextStyle(height: 1.5, fontFamily: "Roboto", fontSize: 16),
-                decoration: InputDecoration(
-                  // prefixIcon: Icon(Icons.search),
-                  // hintText: formControl.hint,
-                  labelText: "Select People",
-                  // enabled: false,
-                  // errorText: field.errorText,
-                ),
-                findSuggestions: (String query) {
-                  if (query.length != 0) {
-                    var lowercaseQuery = query.toLowerCase();
-                    return mockResults.where((profile) {
-                      return profile.name
-                          .toLowerCase()
-                          .contains(query.toLowerCase()) ||
-                          profile.email
-                              .toLowerCase()
-                              .contains(query.toLowerCase());
-                    }).toList(growable: false)
-                      ..sort((a, b) => a.name
-                          .toLowerCase()
-                          .indexOf(lowercaseQuery)
-                          .compareTo(
-                          b.name.toLowerCase().indexOf(lowercaseQuery)));
-                  } else {
-                    return mockResults;
-                  }
-                },
-                onChanged: (data) {
-                  print(data);
-                },
-                chipBuilder: (context, state, profile) {
-                  return InputChip(
-                    key: ObjectKey(profile),
-                    label: Text(profile.name),
-                    avatar: CircleAvatar(
-                      backgroundImage: NetworkImage(profile.imageUrl),
-                    ),
-                    onDeleted: () => state.deleteChip(profile),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  );
-                },
-                suggestionBuilder: (context, state, profile) {
-                  return ListTile(
-                    key: ObjectKey(profile),
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(profile.imageUrl),
-                    ),
-                    title: Text(profile.name),
-                    subtitle: Text(profile.email),
-                    onTap: () => state.selectSuggestion(profile),
-                  );
-                },
-              ),*/
-              RaisedButton(
-                child: Text('Add Chip'),
+              TextButton(
                 onPressed: () {
                   _chipKey.currentState.selectSuggestion(AppProfile(
                       'Gina',
                       'fred@flutter.io',
                       'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'));
                 },
+                child: Text('Add Chip'),
               ),
             ],
           ),

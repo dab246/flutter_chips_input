@@ -275,6 +275,19 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
     }
   }
 
+  void addMultipleValue(List<T> listData) {
+    if (!_hasReachedMaxChips) {
+      setState(() => _chips.addAll(listData));
+      _updateTextInputState(replaceText: true);
+      setState(() => _suggestions = null);
+      _suggestionsStreamController.add(_suggestions);
+      if (_hasReachedMaxChips) _suggestionsBoxController.close();
+      widget.onChanged(_chips.toList(growable: false));
+    } else {
+      _suggestionsBoxController.close();
+    }
+  }
+
   void deleteChip(T data) {
     if (widget.enabled) {
       setState(() => _chips.remove(data));
